@@ -3,4 +3,5 @@ export class Car {
   mark: string;
   model: string;
   description: string;
+  stock: number;
 }
