@@ -11,6 +11,17 @@ export class CarsService {
     this.initializeCars();
   }
 
+  public createCar(newCar: Car): Car {
+    this.lastId++;
+    newCar.id = this.lastId;
+    this.cars.push(newCar);
+    return newCar;
+  }
+
+  public getCars(): Car[] {
+    return this.cars;
+  }
+
   private initializeCars(): void {
     this.cars = [];
     this.lastId = 0;
@@ -20,7 +31,7 @@ export class CarsService {
     car1.mark = 'Ford';
     car1.model = 'Focus';
     car1.description = 'Description Ford Focus';
-    // @ts-ignore
+    car1.stock = 1;
     this.cars.push(car1);
     this.lastId++;
 
@@ -29,34 +40,21 @@ export class CarsService {
     car2.mark = 'Seat';
     car2.model = 'Ibiza';
     car2.description = 'Description Seat Ibiza';
-    // @ts-ignore
+    car2.stock = 3;
     this.cars.push(car2);
     this.lastId++;
 
     const car3: Car = new Car();
-    car3.id = 2;
+    car3.id = 3;
     car3.mark = 'BMW';
     car3.model = 'X5';
     car3.description = 'Description BMW X5';
-    // @ts-ignore
+    car3.stock = 0;
     this.cars.push(car3);
     this.lastId++;
   }
 
-  public getCars(): Car[] {
-    return this.cars;
-  }
-
-  public createCar(newCar: Car): Car {
-    this.lastId++;
-    newCar.id = this.lastId
-    // @ts-ignore
-    this.cars.push(newCar);
-    return newCar;
-  }
-
   public updateCar(car: Car): Car {
-    // @ts-ignore
     const index: number = this.cars.findIndex((tmpCar: Car) => {
       return tmpCar.id === car.id;
     });
@@ -69,13 +67,11 @@ export class CarsService {
   }
 
   public removeCar(id: number): Car {
-    // @ts-ignore
     const index: number = this.cars.findIndex((car: Car) => {
       return car.id === id;
     });
     if (index > -1) {
       const car: Car = this.cars[index];
-      // @ts-ignore
       this.cars.splice(index, 1);
       return car;
     } else {

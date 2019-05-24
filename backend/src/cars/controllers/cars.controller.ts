@@ -25,7 +25,6 @@ export class CarsController {
 
   @Delete(':id')
   removeCar(@Param('id') id: string): Car {
-    // @ts-ignore
     const carId: number = parseInt(id, 10);
     return this.carsService.removeCar(carId);
   }
