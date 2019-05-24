@@ -111,6 +111,11 @@
         path: '/',
       },
       {
+        title: 'Cars',
+        icon: 'directions_car',
+        path: '/cars',
+      },
+      {
         title: 'About',
         icon: 'question_answer',
         path: '/about',
