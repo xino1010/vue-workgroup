@@ -20,13 +20,23 @@ const carsMutations: MutationTree<CarsState> = {
     Vue.set(state, CARS, cars);
   },
   [CARS_NEW]: (state: CarsState, car: Car) => {
-    // TODO: añadir el objeto al array
+    state.cars.push(car);
   },
   [CARS_UPDATE]: (state: CarsState, car: Car) => {
-    // TODO: buscar la posición que ocupa el objeto en el array y 'setearlo' por el 'actual'
+    const index: number = state.cars.findIndex((tmpCar: Car) => {
+      return tmpCar.id === car.id;
+    });
+    if (index > -1) {
+      Vue.set(state.cars, index, car);
+    }
   },
   [CARS_DELETE]: (state: CarsState, car: Car) => {
-    // TODO: buscar la posición que ocupa el objeto en el array y eliminarlo del array
+    const index: number = state.cars.findIndex((tmpCar: Car) => {
+      return tmpCar.id === car.id;
+    });
+    if (index > -1) {
+      state.cars.splice(index, 1);
+    }
   },
 };
 
@@ -43,19 +53,40 @@ const carsActions: ActionTree<CarsState, any> = {
       });
     });
   },
-  [CARS_NEW]: ({commit, dispatch}, newCar: Car): Promise<Car> => {
+  [CARS_NEW]: ({commit, dispatch}, car: Car): Promise<Car> => {
     return new Promise<Car>((resolve) => {
-      // TODO: petición al servidor y llamar a la mutación correspondiente
+      Api().post(`cars`, car)
+        .then((response: AxiosResponse) => {
+          const newCar: Car = response.data;
+          commit(CARS_NEW, newCar);
+          resolve(newCar);
+        }).catch((error: AxiosError) => {
+        console.log(error);
+      });
     });
   },
   [CARS_UPDATE]: ({commit, dispatch}, car: Car): Promise<Car> => {
     return new Promise<Car>((resolve) => {
-      // TODO: petición al servidor y llamar a la mutación correspondiente
+      Api().put(`cars`, car)
+        .then((response: AxiosResponse) => {
+          const updatedCar: Car = response.data;
+          commit(CARS_UPDATE, updatedCar);
+          resolve(updatedCar);
+        }).catch((error: AxiosError) => {
+        console.log(error);
+      });
     });
   },
   [CARS_DELETE]: ({commit, dispatch}, car: Car): Promise<Car> => {
     return new Promise<Car>((resolve) => {
-      // TODO: petición al servidor y llamar a la mutación correspondiente
+      Api().delete(`cars/${car.id}`)
+        .then((response: AxiosResponse) => {
+          const deletedCar: Car = response.data;
+          commit(CARS_DELETE, deletedCar);
+          resolve(deletedCar);
+        }).catch((error: AxiosError) => {
+        console.log(error);
+      });
     });
   },
 };

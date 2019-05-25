@@ -62,9 +62,9 @@
   export default class Cars extends Vue {
 
     @Action(CARS_LIST, {namespace: CARS_MODULE}) private getCars!: () => Promise<Car[]>;
-    // TODO: Action para crear objeto
-    // TODO: Action para editar objeto
-    // TODO: Action para eliminar objeto
+    @Action(CARS_NEW, {namespace: CARS_MODULE}) private createCar!: (newCar: Car) => Promise<Car>;
+    @Action(CARS_UPDATE, {namespace: CARS_MODULE}) private updateCar!: (editedCar: Car) => Promise<Car>;
+    @Action(CARS_DELETE, {namespace: CARS_MODULE}) private deleteCar!: (car: Car) => Promise<Car>;
     @State(CARS, {namespace: CARS_MODULE}) public cars!: Car[];
     public selectedCar: Car | null = null;
     public showSnackBar: boolean = false;
@@ -92,7 +92,10 @@
     }
 
     public removeCar(car: Car): void {
-      // TODO: utilizar acción de Vuex para eliminar el objeto
+      this.deleteCar(car).then((deletedCar: Car) => {
+        this.textSnackBar = 'Deleted car successfully';
+        this.showSnackBar = true;
+      });
     }
 
     public onSavedCar(car: Car): void {
@@ -101,9 +104,15 @@
           return tmpCar.id === car.id;
         });
         if (index > -1) {
-          // TODO: utilizar acción de Vuex para actualizar el objeto
+          this.updateCar(car).then((updatedCar: Car) => {
+            this.textSnackBar = 'Updated car successfully';
+            this.showSnackBar = true;
+          });
         } else {
-          // TODO: utilizar acción de Vuex para crear el objeto
+          this.createCar(car).then((newCar: Car) => {
+            this.textSnackBar = 'Created car successfully';
+            this.showSnackBar = true;
+          });
         }
       }
       this.selectedCar = null;

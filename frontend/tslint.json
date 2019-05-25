@@ -16,6 +16,7 @@
     "object-literal-sort-keys": false,
     "no-consecutive-blank-lines": false,
     "no-console": false,
-    "member-ordering": false
+    "member-ordering": false,
+    "no-empty": false
   }
 }
