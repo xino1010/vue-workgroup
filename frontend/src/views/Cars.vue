@@ -8,7 +8,7 @@
         v-model="showSnackBar"
     >
       <v-icon dark small>check_circle</v-icon>
-      Car deleted successfully
+      {{ textSnackBar }}
     </v-snackbar>
     <div>
       <h1 class="text-xs-center">List of cars</h1>
@@ -53,13 +53,19 @@
   import CarDetails from '@/components/CarDetails.vue';
   import {Car} from '@/classes/car';
   import {cloneObject} from '@/services/utils';
+  import {Action, State} from 'vuex-class';
+  import {CARS, CARS_DELETE, CARS_LIST, CARS_MODULE, CARS_NEW, CARS_UPDATE} from '@/modules/cars/cars.types';
 
   @Component({
     components: {CarDetails},
   })
   export default class Cars extends Vue {
 
-    public cars: Car[] = [];
+    @Action(CARS_LIST, {namespace: CARS_MODULE}) private getCars!: () => Promise<Car[]>;
+    // TODO: Action para crear objeto
+    // TODO: Action para editar objeto
+    // TODO: Action para eliminar objeto
+    @State(CARS, {namespace: CARS_MODULE}) public cars!: Car[];
     public selectedCar: Car | null = null;
     public showSnackBar: boolean = false;
     public headers: any[] = [
@@ -70,24 +76,11 @@
       {text: 'Stock', align: 'left', sortable: true, value: 'stock'},
       {text: 'Actions', align: 'center', sortable: false, value: null},
     ];
-    private readonly NUM_CARS = 10;
+    public textSnackBar: string = '';
 
     private mounted() {
-      this.initializeCars();
-    }
-
-    private initializeCars(): void {
-      this.cars = [];
-      for (let i = 0; i < this.NUM_CARS; i++) {
-        const car: Car = new Car();
-        const j = i + 1;
-        car.id = j;
-        car.mark = `Mark ${j}`;
-        car.model = `Model ${j}`;
-        car.description = `Description ${j}`;
-        car.stock = i;
-        this.cars.push(car);
-      }
+      this.getCars().then((cars: Car[]) => {
+      });
     }
 
     public newCar(): void {
@@ -99,16 +92,7 @@
     }
 
     public removeCar(car: Car): void {
-      const index: number = this.cars.findIndex((tmpCar: Car) => {
-        return tmpCar.id === car.id;
-      });
-      if (index > -1) {
-        this.cars.splice(index, 1);
-        this.showSnackBar = true;
-        setTimeout(() => {
-          this.showSnackBar = false;
-        }, 2000);
-      }
+      // TODO: utilizar acción de Vuex para eliminar el objeto
     }
 
     public onSavedCar(car: Car): void {
@@ -117,9 +101,9 @@
           return tmpCar.id === car.id;
         });
         if (index > -1) {
-          this.cars.splice(index, 1, car);
+          // TODO: utilizar acción de Vuex para actualizar el objeto
         } else {
-          this.cars.push(car);
+          // TODO: utilizar acción de Vuex para crear el objeto
         }
       }
       this.selectedCar = null;
