@@ -26,11 +26,9 @@
 
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
-  import CarDetails from '@/components/CarDetails.vue';
   import {Car} from '@/classes/car';
 
   @Component({
-    components: {CarDetails},
   })
   export default class Cars extends Vue {
 
